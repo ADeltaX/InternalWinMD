@@ -1,0 +1,82 @@
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "windows.storage.streams.idl";
+
+namespace Windows.Internal.Shell
+{
+	enum PlayPauseCommandStatus
+    {
+        Pause = 1,
+        Play = 2
+    };
+	
+	[contractversion(1.0)]
+	apicontract InternalContract
+	{
+	}
+	
+	[exclusiveto(Windows.Internal.Shell.MtcModel)]
+	[uuid(DEB2D9E4-867D-4FFE-AB78-8296C5D16C6B)]
+	[contract(Windows.Internal.Shell.InternalContract, 1.0)]
+	interface IMtcModel
+	{
+		event Windows.Foundation.EventHandler<Object> SessionListChanged;
+		event Windows.Foundation.EventHandler<Object> CurrentSessionChanged;
+		Windows.Internal.Shell.MtcSession CurrentSession { get; };
+		IVector<MtcSession> SessionList { get; };
+	}
+
+	[contract(Windows.Internal.Shell.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Shell.MtcSession)]
+	[uuid(469842DA-CB8C-420A-AD81-40445DB4E8BC)]
+	interface IMtcSession
+	{
+		event Windows.Foundation.EventHandler<Object> MediaInformationChanged;
+		event Windows.Foundation.EventHandler<Object> ThumbnailChanged;
+		event Windows.Foundation.EventHandler<Object> CommandStatusChanged;
+		Windows.Foundation.Size DesiredThumbnailSize { get; set; };
+		String Title { get; };
+        String Subtitle { get; };
+        String SourceAppId { get; };
+		Windows.Storage.Streams.IRandomAccessStream Thumbnail { get; };
+		UInt64 ThumbnailBackgroundColor { get; };
+		void ActivateSessionSource();
+		
+		PlayPauseCommandStatus PlayPauseCommandStatus { get; };
+        void SendPlayPauseCommand();
+		
+		Boolean IsStopCommandEnabled { get; };
+        void SendStopCommand();
+
+        Boolean IsRewindCommandEnabled { get; };
+        Object BeginRewindOperation();
+
+        Boolean IsFastForwardCommandEnabled { get; };
+        Object BeginFastForwardOperation();
+
+        Boolean IsPreviousCommandEnabled { get; };
+        void SendPreviousCommand();
+
+        Boolean IsNextCommandEnabled { get; };
+        void SendNextCommand();
+		
+		Object BeginInteractionWithSession();
+	}
+
+	[contract(Windows.Internal.Shell.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	runtimeclass MtcSession
+	{
+		[default] interface Windows.Internal.Shell.IMtcSession;
+	}
+
+	
+	[activatable(Windows.Internal.Shell.InternalContract, 1.0)]
+	[contract(Windows.Internal.Shell.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass MtcModel
+	{
+		[default] interface Windows.Internal.Shell.IMtcModel;
+	}
+}
