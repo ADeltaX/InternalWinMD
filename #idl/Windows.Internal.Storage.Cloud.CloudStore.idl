@@ -1,0 +1,179 @@
+import "inspectable.idl";
+import "EventToken.idl";
+import "AsyncInfo.idl";
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.UI.idl";
+import "Windows.System.idl";
+import "windows.security.credentials.idl";
+
+namespace Windows.Internal.Storage.Cloud
+{
+	[version(0x00000001)]
+	[uuid("fc73907e-e219-4b15-9c14-90c3add7ad22")]
+	interface ICloudStoreFactory //Factory activation
+	{
+		Windows.Internal.Storage.Cloud.CloudStore CreateInstance(UInt32 cloudStoreOptions, Windows.System.User user, Windows.Security.Credentials.IWebAccount webAccount, String a);
+	}
+
+	[version(0x00000001)]
+	[uuid("7d341022-b665-409e-9774-b400dc9efedb")]
+	interface ICloudStoreIndirectFactory //Factory activation
+	{
+		Windows.Internal.Storage.Cloud.CloudStore CreateInstanceIndirect(UInt32 cloudStoreOptions, UInt64 b, String c, String d, String e, String f); //enum CloudStoreOptions
+	}
+	
+	[version(0x00000001)]
+	[uuid("880ef12d-8696-41da-b117-28494bad244c")]
+	[exclusiveto(Windows.Internal.Storage.Cloud.CloudStore)]
+	interface ICloudStore
+	{
+		String User { get; };
+		Windows.Security.Credentials.WebAccount WebAccount { get; };
+		String PackageFamilyName { get; };
+		Windows.Internal.Storage.Cloud.CloudStoreData Load(UInt32 partitionKind, String b, String c, String d, String e, UInt32 loadOptions, String g); //enum PartitionKind, enum LoadOptions
+		IVectorView<Windows.Internal.Storage.Cloud.CloudStoreItemName> GetCollectionItemNames(UInt32 partitionKind, String b, String c, String d, UInt32 loadOptions, UInt32 collectionOptions, String g); //enum PartitionKind, enum LoadOptions, enum CollectionOptions
+		Windows.Internal.Storage.Cloud.CloudStoreSaveResult Save(UInt32 partitionKind, String b, String c, String d, String e, CloudStoreData f, UInt64 g, Windows.Storage.Streams.IBuffer h, UInt32 saveOptions, String j); //enum PartitionKind, enum SaveOptions
+		UInt64 GetVersion(UInt32 partitionKind, String b, String c, String d, String e, String f, UInt64 g); //enum PartitionKind
+		Windows.Internal.Storage.Cloud.CloudStoreSaveResult Delete(UInt32 partitionKind, String b, String c, String d, String e, UInt64 f, String g); //enum PartitionKind
+		Windows.Internal.Storage.Cloud.CloudStoreDataWatcher CreateWatcher(UInt32 partitionKind, String b, String c, String d, String e, UInt32 cloudDataChangeKinds, UInt64 g, String h); //enum PartitionKind, enum CloudDataChangeKinds
+		Windows.Internal.Storage.Cloud.CloudStoreCollectionWatcher CreateCollectionWatcher(UInt32 partitionKind, String b, String c, String d, UInt32 loadOptions, UInt32 collectionOptions, String g); //enum PartitionKind, enum LoadOptions, enum CollectionOptions
+		Boolean IsNewDataAvailableInCloud(UInt32 partitionKind, String b, String c, String d, String e, String f); //enum PartitionKind
+		UInt64 GetNextVersion(String a);
+		UInt64 GetNextVersionAfterTime(String a, Windows.Foundation.DateTime b);
+		void RegisterSchema(Windows.Storage.Streams.IBuffer a);
+		Windows.Internal.Storage.Cloud.CloudStoreSchema GetSchema(String a);
+		Windows.Data.Json.JsonObject ToJson(String a, Windows.Storage.Streams.IBuffer b);
+		Windows.Storage.Streams.IBuffer FromJson(String a, Windows.Data.Json.JsonObject b);
+	}
+
+	[uuid("d9792ec7-fd45-4a75-a0d4-3fae506d93e5")]
+	interface ICloudStoreData
+	{
+		Windows.Internal.Storage.Cloud.CloudStoreItemName ItemName { get; };
+		Windows.Storage.Streams.IBuffer Data { get; };
+		UInt64 Version { get; };
+		Object CloudData { get; };
+	}
+
+	[uuid("3dc7015b-6cc9-499b-9287-69f34ef4d08c")]
+	interface ICloudStoreItemName
+	{
+		Windows.Internal.Storage.Cloud.CloudStoreCollectionName CollectionName { get; };
+		String InstanceName { get; };
+		String TypeName { get; };
+	}
+
+	[uuid("ad50d5b7-6f27-4767-8600-630955a6d916")]
+	interface ICloudStoreCollectionName
+	{
+		String CustomName { get; };
+		String PartitionName { get; };
+		String TypeName { get; };
+	}
+
+	[uuid("2d1de7eb-d31b-4c22-b23e-09efdd863908")]
+	interface ICloudStoreSaveResult
+	{
+		UInt64 Version { get; };
+		Windows.Internal.Storage.Cloud.CloudStoreData SavedData { get; };
+	}
+
+	[uuid("db3c3498-bea4-4570-aa92-47ea55308080")]
+	interface ICloudStoreDataWatcher
+	{
+		event Windows.Foundation.TypedEventHandler<Windows.Internal.Storage.Cloud.CloudStoreDataWatcher, Windows.Internal.Storage.Cloud.CloudStoreDataChangedEventArgs> DataChanged;
+	}
+	
+	[uuid("ef1479b0-d577-4b90-8790-9e41e57d7053")]
+	interface ICloudStoreCollectionWatcher
+	{
+        event Windows.Foundation.TypedEventHandler<Windows.Internal.Storage.Cloud.CloudStoreCollectionWatcher, Windows.Internal.Storage.Cloud.CloudStoreCollectionChangedEventArgs> DataChanged;
+	}
+
+	[uuid("f82572f6-e022-485d-83b0-9ef98992995a")]
+	interface ICloudStoreDataChangedEventArgs
+	{
+		Windows.Internal.Storage.Cloud.CloudStoreItemName Name { get; };
+		UInt32 ChangeKind { get; }; //CloudDataChangeKinds
+		Windows.Internal.Storage.Cloud.CloudStoreData DataItem { get; };
+	}
+	
+	[uuid("9bf2edc3-81f3-4544-b7d0-729a860d3e4d")]
+	interface ICloudStoreCollectionChangedEventArgs
+	{
+        Windows.Internal.Storage.Cloud.CloudStoreCollectionName CollectionName { get; };
+        Windows.Foundation.Collections.IVectorView<Windows.Internal.Storage.Cloud.CloudStoreItemName> CollectionItemNames { get; };
+	}
+
+	[uuid("cf3be365-6218-4518-9fed-e1fd3ecf2361")]
+	interface ICloudStoreSchema
+	{
+		String TypeName { get; };
+		Windows.Storage.Streams.IBuffer Schema { get; };
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreCollectionWatcher
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreCollectionWatcher;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreCollectionChangedEventArgs
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreCollectionChangedEventArgs;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreDataChangedEventArgs
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreDataChangedEventArgs;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreSchema
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreSchema;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreDataWatcher
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreDataWatcher;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreSaveResult
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreSaveResult;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreCollectionName
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreCollectionName;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreItemName
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreItemName;
+	}
+	
+	[version(0x00000001)]
+	runtimeclass CloudStoreData
+	{
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStoreData;
+	}
+	
+	[marshaling_behavior(agile)]
+    [static(Windows.Internal.Storage.Cloud.ICloudStoreFactory, 0x00000001)]
+	[static(Windows.Internal.Storage.Cloud.ICloudStoreIndirectFactory, 0x00000001)]
+    [threading(both)]
+    [version(0x00000001)]
+    runtimeclass CloudStore
+    {
+		[default] interface Windows.Internal.Storage.Cloud.ICloudStore;
+    }
+}
