@@ -1,0 +1,207 @@
+import "inspectable.idl";
+import "AsyncInfo.idl";
+import "EventToken.idl";
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.ApplicationModel.LockScreen.idl";
+
+namespace lockframework
+{
+    [contractversion(1.0)]
+    apicontract PrivateContract
+    {
+    }
+	
+	enum StatusValueType
+	{
+		None = 0x0,
+		Network = 0x1,
+		Battery = 0x2
+	};
+	
+	enum LockSlideshowCommand
+	{
+		None = 0x0,
+		Initialize = 0x1,
+		Start = 0x2,
+		Stop = 0x3
+	};
+	
+	enum LockAppWallpaperImageStyle
+	{
+		Default = 0x0,
+		ContinuumPortrait = 0x1,
+		ContinuumBing = 0x2
+	};
+	
+	enum UserActivityType
+	{
+		None = 0x0,
+		LockManipulation = 0x1,
+		StartDismiss = 0x2,
+		StopDismiss = 0x3,
+		AppAboveLock = 0x4,
+		LockMaybeTransparent = 0x5,
+		LockIsOpaque = 0x6,
+		LockMediaControlsShown = 0x7,
+		LockMediaControlsHidden = 0x8,
+		UserSelectionShown = 0x9,
+		UserSelectionHidden = 0xA
+	};
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    [exclusiveto(lockframework.LockApplicationHostPrivate)]
+    [uuid(DAD3BAAC-ED7E-4E82-AE47-E82C4DD20937)]
+    interface ILockApplicationHostPrivate : IInspectable
+    {
+			  HRESULT DismissSingleViewFromLockScreen();
+			  HRESULT ShowSingleViewOnLockScreen();
+[eventadd]    HRESULT SingleViewActivationAboveLockImminent([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT SingleViewActivationAboveLockImminent([in] EventRegistrationToken token);
+[propget]     HRESULT IsKidZoneAvailable([out] [retval] boolean* value);
+			  HRESULT NavigateToKidZone();
+			  HRESULT NotifyUserActivity([in] lockframework.UserActivityType type);
+[propget]     HRESULT CredentialsRequired([out] [retval] boolean* value);
+[eventadd]    HRESULT CredentialsRequiredChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT CredentialsRequiredChanged([in] EventRegistrationToken token);
+[propget]     HRESULT BioFeedbackState([out] [retval] unsigned int* value);
+[propget]     HRESULT BioFeedbackLabel([out] [retval] HSTRING* value);
+[eventadd]    HRESULT BioFeedbackChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT BioFeedbackChanged([in] EventRegistrationToken token);
+[propget]     HRESULT WallpaperImageStyle([out] [retval] lockframework.LockAppWallpaperImageStyle * value);
+[propget]     HRESULT ShouldRequireSecureGesture([out] [retval] boolean* value);
+[propget]     HRESULT SecureGestureText([out] [retval] HSTRING* value);
+[propget]     HRESULT ShouldShowSpeedBump([out] [retval] boolean* value);
+[propget]     HRESULT SpeedBumpText([out] [retval] HSTRING* value);
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    runtimeclass LockApplicationHostPrivate
+    {
+		[default] interface lockframework.ILockApplicationHostPrivate;
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    [exclusiveto(lockframework.LockCreative)]
+    [uuid(1BDB56D8-FCE7-4C5C-A06A-45E7EA7970D6)]
+    interface ILockCreative : IInspectable
+    {
+[propget] HRESULT CreativeId([out] [retval] HSTRING* value);
+[propget] HRESULT AssetPath([out] [retval] HSTRING* value);
+[propget] HRESULT CreativeJson([out] [retval] HSTRING* value);
+[propget] HRESULT PlacementId([out] [retval] HSTRING* value);
+[propget] HRESULT ImpressionToken([out] [retval] HSTRING* value);
+		  HRESULT GetHotspotImageFolderAsync([out] [retval] Windows.Foundation.IAsyncOperation<Windows.Storage.StorageFolder *> ** result);
+		  HRESULT IsSetAsDesktopBackgroundEnabled([out] [retval] boolean* value);
+		  HRESULT IsSetAsDesktopBackgroundVariantEnabled([out] [retval] boolean* value);
+		  HRESULT SetAsDesktopBackground();
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    runtimeclass LockCreative
+    {
+		[default] interface lockframework.ILockCreative;
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    [exclusiveto(lockframework.LockSlideshowProvider)]
+    [uuid(5ED6B0AA-DE1C-46B2-BBA3-E87CEBC24516)]
+    interface ILockSlideshowProvider : IInspectable
+    {
+[propget]     HRESULT IsSlideshowEnabled([out] [retval] boolean* value);
+[propget]     HRESULT IsSlideshowInitialized([out] [retval] boolean* value);
+              HRESULT InitializeSlideshowAsync([in] boolean value);
+              HRESULT Shutdown();
+              HRESULT SendSlideshowCommand([in] lockframework.LockSlideshowCommand command);
+[eventadd]    HRESULT SlideshowEvent([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT SlideshowEvent([in] EventRegistrationToken token);
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    runtimeclass LockSlideshowProvider
+    {
+		[default] interface lockframework.ILockSlideshowProvider;
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    [exclusiveto(lockframework.LockStatusProvider)]
+    [uuid(8FE60A8A-32AC-4604-804A-A17D67F878B8)]
+    interface ILockStatusProvider : IInspectable
+    {
+[propget] HRESULT StatusValueType([out] [retval] lockframework.StatusValueType* value);
+[propget] HRESULT Icon([out] [retval] Windows.Storage.Streams.IRandomAccessStream** value);
+[propget] HRESULT AccessibleText([out] [retval] HSTRING* value);
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    runtimeclass LockStatusProvider
+    {
+		[default] interface lockframework.ILockStatusProvider;
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    [exclusiveto(lockframework.LockScreenInfoPrivate)]
+    [uuid(76B5212E-EF05-417D-813A-8241D965E43F)]
+    interface ILockScreenInfoPrivate : IInspectable
+    {
+[eventadd]    HRESULT NetworkStatusChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT NetworkStatusChanged([in] EventRegistrationToken token);
+[propget]     HRESULT NetworkStatus([out] [retval] lockframework.LockStatusProvider** value);
+[eventadd]    HRESULT BatteryStatusChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT BatteryStatusChanged([in] EventRegistrationToken token);
+[propget]     HRESULT BatteryStatus([out] [retval] lockframework.LockStatusProvider** value);
+[eventadd]    HRESULT MediaServiceIsPlayingChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT MediaServiceIsPlayingChanged([in] EventRegistrationToken token);
+[propget]     HRESULT MediaServiceIsPlaying([out] [retval] boolean* value);
+[eventadd]    HRESULT MediaServiceBackgroundImageChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT MediaServiceBackgroundImageChanged([in] EventRegistrationToken token);
+[propget]     HRESULT MediaServiceBackgroundImage([out] [retval] Windows.Storage.Streams.IRandomAccessStream** value);
+[eventadd]    HRESULT MonitorPowerChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT MonitorPowerChanged([in] EventRegistrationToken token);
+[propget]     HRESULT MonitorPower([out] [retval] boolean * value);
+[propget]     HRESULT ShowNowPlayingMediaArt([out] [retval] boolean * value);
+[propget]     HRESULT Creative([out] [retval] lockframework.LockCreative** value);
+[propget]     HRESULT LockSlideshowProvider([out] [retval] lockframework.LockSlideshowProvider** value);
+[propget]     HRESULT CurrentWallpaperProvider([out] [retval] GUID* value);
+[propget]     HRESULT BadgeHintSize([out] [retval] unsigned int* value);
+[propget]     HRESULT NavBarHeight([out] [retval] unsigned int* value);
+[eventadd]    HRESULT NavBarHeightChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT NavBarHeightChanged([in] EventRegistrationToken token);
+[propget]     HRESULT IsIrisHelloEnabled([out] [retval] boolean* value);
+[eventadd]    HRESULT TimeZoneChanged([in] Windows.Foundation.EventHandler<IInspectable *> * eventHandler, [out] [retval] EventRegistrationToken* token);
+[eventremove] HRESULT TimeZoneChanged([in] EventRegistrationToken token);
+              HRESULT Disconnect();
+              HRESULT Reconnect();
+    }
+	
+	[contract(lockframework.PrivateContract, 1.0)]
+    runtimeclass LockScreenInfoPrivate
+    {
+		[default] interface lockframework.ILockScreenInfoPrivate;
+    }
+	
+    [contract(lockframework.PrivateContract, 1.0)]
+    [exclusiveto(lockframework.LockAppBroker)]
+    [uuid(FCC7498E-D8CF-4993-A9AE-804193AF19D7)]
+    interface ILockAppBrokerStatics : IInspectable
+    {
+		  HRESULT CreateLockScreenInfo([out] [retval] Windows.ApplicationModel.LockScreen.LockScreenInfo** result);
+		  HRESULT CreateLockScreenInfoAsArgs([out] [retval] lockframework.LockScreenInfoPrivate** result);
+		  HRESULT GetPrivateLockScreenInfo([in] Windows.ApplicationModel.LockScreen.LockScreenInfo* lockScreenInfo, [out] [retval] lockframework.LockScreenInfoPrivate** result);
+		  HRESULT GetPrivateLockApplicationHost([in] Windows.ApplicationModel.LockScreen.LockApplicationHost* lockAppHost, [out] [retval] lockframework.LockApplicationHostPrivate** result);
+		  HRESULT GetPrivateWelcomeScreenHost([in] Windows.ApplicationModel.LockScreen.LockApplicationHost* lockAppHost, [out] [retval] IInspectable** /* lockframework.WelcomeScreenHostPrivate */ result);
+[propget] HRESULT UseSingleViewOnLockScreen([out] [retval] boolean* value);
+[propput] HRESULT UseSingleViewOnLockScreen([in] boolean value);
+[propget] HRESULT IsLockLayerEnabled([out] [retval] boolean* value);
+		  HRESULT GetFeatureSupportedAndEnabled([in] HSTRING featureName, [out] [retval] boolean* result);
+		  HRESULT LaunchCortanaApp([in] HSTRING params);
+    }
+	
+    [contract(lockframework.PrivateContract, 1.0)]
+    [marshaling_behavior(agile)]
+    [static(lockframework.ILockAppBrokerStatics, lockframework.PrivateContract, 1.0)]
+	//[static(lockframework.ILockAppBrokerStatics2, lockframework.PrivateContract, 1.0)]
+    runtimeclass LockAppBroker
+    {
+    }
+}

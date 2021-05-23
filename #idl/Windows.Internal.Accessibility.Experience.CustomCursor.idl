@@ -1,0 +1,44 @@
+import "inspectable.idl";
+import "AsyncInfo.idl";
+import "EventToken.idl";
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.Storage.idl";
+import "Windows.Storage.Streams.idl";
+import "Windows.UI.idl";
+
+namespace Windows.Internal.Accessibility.Experience
+{
+    apicontract InternalContract;
+
+    interface __ICustomCursorStatics;
+
+    runtimeclass CustomCursor;
+
+}
+
+namespace Windows.Internal.Accessibility.Experience
+{
+    [contractversion(1.0)]
+    apicontract InternalContract
+    {
+    }
+
+    [contract(Windows.Internal.Accessibility.Experience.InternalContract, 1.0)]
+    [exclusiveto(Windows.Internal.Accessibility.Experience.CustomCursor)]
+    [uuid(30CBCAD0-37AC-56B6-8C0B-74B54A8058A5)]
+    interface __ICustomCursorStatics : IInspectable
+    {
+        HRESULT ApplyCustomCursor([in] Int32 size, [in] Windows.UI.Color newColor);
+        HRESULT ApplyInvertedCursor([in] Int32 size);
+    }
+
+	[activatable(Windows.Internal.Accessibility.Experience.InternalContract, 1.0)]
+    [contract(Windows.Internal.Accessibility.Experience.InternalContract, 1.0)]
+    [marshaling_behavior(agile)]
+	[threading(both)]
+    runtimeclass CustomCursor
+    {
+		[default] interface Windows.Internal.Accessibility.Experience.__ICustomCursorStatics;
+    }
+}

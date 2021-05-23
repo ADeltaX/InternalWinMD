@@ -1,0 +1,66 @@
+import "inspectable.idl";
+import "AsyncInfo.idl";
+import "EventToken.idl";
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.UI.idl";
+
+namespace ApplicationTheme
+{
+    [contractversion(1.0)]
+    apicontract MemeContract
+    {
+    }
+
+    [contract(ApplicationTheme.MemeContract, 1.0)]
+    enum ThemeAccentColorVariant
+    {
+        ThemeAccentLight3    = 0,
+        ThemeAccentLight2    = 1,
+        ThemeAccentLight1    = 2,
+        ThemeAccent          = 3,
+        ThemeAccentDark1     = 4,
+        ThemeAccentDark2     = 5,
+        ThemeAccentDark3     = 6,
+        ThemeBaseApplication = 7,
+        ThemeBaseSystem      = 8,
+        ThemeTextApplication = 9,
+        ThemeTextSystem      = 10
+    };
+
+    [contract(ApplicationTheme.MemeContract, 1.0)]
+    [exclusiveto(ApplicationTheme.AppThemeAPI)]
+    [uuid(C5F80E59-A9FC-439D-9FC4-D290858E1867)]
+    interface IAppThemeApiStatics : IInspectable
+    {
+        HRESULT SetThemeBaseApplicationColor([in] Windows.UI.Color newColor);
+        HRESULT SetThemeBaseSystemColor([in] Windows.UI.Color newColor);
+        HRESULT SetThemeAccentColor([in] Windows.UI.Color newColor);
+        HRESULT GetThemeColor([in] ApplicationTheme.ThemeAccentColorVariant colorVariant, [out] [retval] Windows.UI.Color* selectedColor);
+        [eventadd] HRESULT ThemeColorsChanged([in] Windows.Foundation.EventHandler<IInspectable*>* handler, [out] [retval] EventRegistrationToken* token);
+        [eventremove] HRESULT ThemeColorsChanged([in] EventRegistrationToken token);
+        [propget] HRESULT AdvancedEffectsEnabled([out] [retval] boolean* value);
+    }
+	
+	[contract(ApplicationTheme.MemeContract, 1.0)]
+    [exclusiveto(ApplicationTheme.AppThemeAPI)]
+    [uuid(C5114793-B1F6-5005-BD97-ED6BEC1B25F6)]
+    interface IAppThemeApi2Statics : IInspectable
+    {
+        HRESULT SetThemeBaseApplicationColor2([in] Windows.UI.Color newColor);
+        HRESULT SetThemeBaseSystemColor2([in] Windows.UI.Color newColor);
+        HRESULT SetThemeAccentColor2([in] Windows.UI.Color newColor);
+        HRESULT GetThemeColor2([in] ApplicationTheme.ThemeAccentColorVariant colorVariant, [out] [retval] Windows.UI.Color* selectedColor);
+        [eventadd] HRESULT ThemeColorsChanged2([in] Windows.Foundation.EventHandler<IInspectable*>* handler, [out] [retval] EventRegistrationToken* token);
+        [eventremove] HRESULT ThemeColorsChanged2([in] EventRegistrationToken token);
+        [propget] HRESULT AdvancedEffectsEnabled2([out] [retval] boolean* value);
+    }
+
+    [contract(ApplicationTheme.MemeContract, 1.0)]
+    [marshaling_behavior(agile)]
+    [static(ApplicationTheme.IAppThemeApiStatics, ApplicationTheme.MemeContract, 1.0)]
+	[static(ApplicationTheme.IAppThemeApi2Statics, ApplicationTheme.MemeContract, 1.0)]
+    runtimeclass AppThemeAPI
+    {
+    }
+}

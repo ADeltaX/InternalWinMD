@@ -1,0 +1,119 @@
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.UI.Xaml.idl";
+import "Windows.UI.Core.idl";
+
+namespace Windows.UI.Xaml.Hosting
+{
+	[version(0x1)]
+	[uuid(C805B0C0-6210-4E4F-B76A-E894E8B1A4AE)] //TODO: REPLACE GUID
+	interface IXamlRuntimeSite
+	{
+
+	}
+
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlRuntime)]
+	[uuid(C805B0C0-6210-4E4F-B76A-E894E8B1A4AD)]
+	interface IXamlRuntimeStatics
+	{
+		[propget] HRESULT EnableImmersiveColors([out] [retval] boolean* value);
+		[propput] HRESULT EnableImmersiveColors([in] boolean value);
+		[propget] HRESULT EnableWebView([out] [retval] boolean* value);
+		[propput] HRESULT EnableWebView([in] boolean value);
+		HRESULT SetSite([in] Windows.UI.Xaml.Hosting.IXamlRuntimeSite* site);
+	}
+	
+	[version(0x1)]
+	[static(Windows.UI.Xaml.Hosting.IXamlRuntimeStatics, 0x1)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass XamlRuntime
+	{
+		
+	}
+	
+	//----- XAMLPRESENTER
+	
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlPresenter)]
+	[uuid(A49DEA01-9E75-49F0-BEEE-EF1592FBC82B)]
+	interface IXamlPresenterStatics3
+	{
+		HRESULT CreateFromCoreWindow([in] Windows.UI.Core.CoreWindow* coreWindow, [out] [retval] Windows.UI.Xaml.Hosting.XamlPresenter** xamlPresenter);
+	}
+	
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlPresenter)]
+	[uuid(D0C1E6C3-1D35-4770-9C3B-E3FF2EEFCC25)]
+	interface IXamlPresenterStatics2
+	{
+		[propget] HRESULT Current([out] [retval] Windows.UI.Xaml.Hosting.XamlPresenter** value);
+	}
+	
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlPresenter)]
+	[uuid(5C6EF05E-F60D-4433-8BC6-40586456AFEB)]
+	interface IXamlPresenterStatics
+	{
+		HRESULT CreateFromHwnd([in] int hwnd, [out] [retval] Windows.UI.Xaml.Hosting.XamlPresenter** xamlPresenter);
+	}
+	
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlPresenter)]
+	[uuid(62d7b5f2-2eaf-4ccd-bb91-87ad6e01c92d)]
+	interface IXamlPresenterPrivate
+	{
+		HRESULT SetViewActivityState([in] boolean active, [in] boolean allowDWMSnapshot);
+	}
+	
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlPresenter)]
+	[uuid(1114f710-6d30-4572-b24e-c81cf25f0fa5)]
+	interface IXamlPresenter2
+	{
+		[propget] HRESULT Resources([out] [retval] Windows.UI.Xaml.ResourceDictionary** value);
+		[propput] HRESULT Resources([in] Windows.UI.Xaml.ResourceDictionary* value);
+		[propget] HRESULT Bounds([out] [retval] Windows.Foundation.Rect* value);
+		[propget] HRESULT RequestedTheme([out] [retval] Windows.UI.Xaml.ApplicationTheme* value);
+		[propput] HRESULT RequestedTheme([in] Windows.UI.Xaml.ApplicationTheme value);
+		[propget] HRESULT TransparentBackground([out] [retval] boolean* value);
+		[propput] HRESULT TransparentBackground([in] boolean value);
+		HRESULT InitializePresenterWithTheme([in] Windows.UI.Xaml.ApplicationTheme requestedTheme);
+		HRESULT SetCaretWidth(int width);
+	}
+	
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlPresenter)]
+	[uuid(8438b07a-9ce8-4e22-ab5d-811d84699566)]
+	interface IXamlPresenter
+	{
+		[propget] HRESULT Content([out] [retval] Windows.UI.Xaml.UIElement** value);
+		[propput] HRESULT Content([in] Windows.UI.Xaml.UIElement* value);
+		HRESULT SetAtlasSizeHint([in] unsigned int width, [in] unsigned int height);
+		HRESULT InitializePresenter();
+	}
+	
+	[version(0x1)]
+	[exclusiveto(Windows.UI.Xaml.Hosting.XamlPresenter)]
+	[uuid(04d09167-1945-43ac-a0a9-b1aed01be2d8)]
+	interface IXamlPresenterResources
+	{
+
+	}
+	
+
+	[version(0x1)]
+	[static(Windows.UI.Xaml.Hosting.IXamlPresenterStatics, 1.0)]
+	[static(Windows.UI.Xaml.Hosting.IXamlPresenterStatics2, 1.0)]
+	[static(Windows.UI.Xaml.Hosting.IXamlPresenterStatics3, 1.0)] //Implemented somewhere > 15063
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass XamlPresenter
+	{
+		[default] interface Windows.UI.Xaml.Hosting.IXamlPresenter;
+		interface Windows.UI.Xaml.Hosting.IXamlPresenter2;
+		interface Windows.UI.Xaml.Hosting.IXamlPresenterPrivate;
+		interface Windows.UI.Xaml.Hosting.IXamlPresenterResources;
+	}
+}

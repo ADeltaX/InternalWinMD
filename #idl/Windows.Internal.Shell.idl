@@ -6,6 +6,7 @@ namespace Windows.Internal.Shell
 {
 	enum PlayPauseCommandStatus
     {
+		Disabled = 0,
         Pause = 1,
         Play = 2
     };

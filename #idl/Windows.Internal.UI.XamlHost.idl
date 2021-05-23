@@ -1,0 +1,141 @@
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.UI.Xaml.idl";
+
+namespace Windows.Internal.UI.XAMLHost
+{
+	[contractversion(1.0)]
+	apicontract InternalREApiContract
+	{}
+
+	[contract(InternalREApiContract, 1.0)]
+	enum CloseButtonState
+	{
+	  Rest = 0x0,
+	  Hover = 0x1,
+	  Pressed = 0x2
+	};
+	
+	[contract(InternalREApiContract, 1.0)]
+	enum ViewConfigFlags
+	{
+		None = 0x0,
+		ProcessAudioMessage = 0x1,
+		WantsSoftKeyboardNotifications = 0x2,
+		IgnoreInput = 0x4,
+		DisableIme = 0x8,
+		StayFullScreenOnPrimaryMonitor = 0x10,
+		PositionWindowOnWindowPosChanging = 0x20,
+		DisableViewActivityWhenMonitorIsOff = 0x40,
+		ModalToOwner = 0x80,
+		ShowCustomTitleBar = 0x100,
+		UseDesiredSize = 0x200,
+		RespondToThemeChanges = 0x400,
+		ForceEnableOwnerOnDismissal = 0x800,
+		WantsToDelayXamlViewActivity = 0x1000,
+		SetAtlasHint = 0x2000
+	};
+	
+	[contract(InternalREApiContract, 1.0)]
+	struct TitleBarInfo
+	{
+		float Height;
+		float Width;
+		float CloseButtonXOffset;
+		float CloseButtonWidth;
+		float IconWidth;
+	};
+
+
+	//use make for this
+	[contract(InternalREApiContract, 1.0)]
+	[uuid(c8b50ca8-eddd-4a04-a730-646a54223985)]
+	interface IViewDefinition
+	{
+		[propget] HRESULT WindowClassName([out] [retval] HSTRING* value);
+		[propget] HRESULT ResourceFileName([out] [retval] HSTRING* value);
+		[propget] HRESULT WindowTitleUri([out] [retval] HSTRING* value);
+		[propget] HRESULT ApplicationResourcesUri([out] [retval] HSTRING* value);
+		[propget] HRESULT RootUIElement([out] [retval] Windows.UI.Xaml.UIElement** value);
+		[propget] HRESULT RootViewModel([out] [retval] IInspectable** value);
+		[propget] HRESULT XamlRuntimeSite([out] [retval] IInspectable** value); //Windows::UI::Xaml::Hosting::IXamlRuntimeSite
+		[propget] HRESULT Theme([out] [retval] Windows.UI.Xaml.ApplicationTheme* value);
+		[propget] HRESULT ViewConfig([out] [retval] Windows.Internal.UI.XAMLHost.ViewConfigFlags* retval);
+		[propget] HRESULT WindowZOrderBand([out] [retval] unsigned int* value);
+		[propget] HRESULT WindowStylesEx([out] [retval] unsigned int* value);
+		[propget] HRESULT ApplicationResources([out] [retval] IMapView<HSTRING, IInspectable *>** value);
+		[propget] HRESULT LangID([out] [retval] int* value); //unsigned __int16
+		[propget] HRESULT MinWindowSize([out] [retval] Windows.Foundation.Size* value);
+		[propget] HRESULT MaxWindowSize([out] [retval] Windows.Foundation.Size* value);
+		HRESULT GetTitleBarInfo([in] unsigned int scaleFactor, [out] [retval] Windows.Internal.UI.XAMLHost.TitleBarInfo* titleBar);
+		HRESULT UpdateTitleBarCloseButtonState([in] Windows.Internal.UI.XAMLHost.CloseButtonState newState);
+		HRESULT TitleBarClose();
+		HRESULT OnHighContrastChange();
+		HRESULT GetViewPosition([in] unsigned int scaleFactor, [in] Windows.Foundation.Rect desiredSize, [out] [retval] Windows.Foundation.Rect *value);
+		HRESULT SetMergedResourceDictionary([in] IInspectable* resourceDictionary);
+		[propget] HRESULT get_AtlasSize([out] [retval] Windows.Foundation.Size* value);
+	}
+	
+	//use make for this
+	//UNKNOWN UUID
+	[contract(InternalREApiContract, 1.0)]
+	[uuid(b96ba785-0e10-4a12-96d5-f4a22934a5b6)]
+	interface IDispatchableTaskWithContext
+	{
+		HRESULT Dispatch([in] IInspectable* context);
+	}
+	
+	
+	//use make for this	
+	[contract(InternalREApiContract, 1.0)]
+	[uuid(b96ba785-0e10-4a12-96d5-f4a22934a5b5)]
+	interface IDispatchableTask
+	{
+		HRESULT Dispatch();
+	}
+
+	[contract(InternalREApiContract, 1.0)]
+	[uuid(7b76cf90-ae25-4ffe-b0e3-23511e1d0911)]
+	interface IUIThreadDispatcher
+	{
+		HRESULT DispatchTask([in] Windows.Internal.UI.XAMLHost.IDispatchableTask* dispatchEvent);
+		HRESULT DispatchToRootViewModel([in] Windows.Internal.UI.XAMLHost.IDispatchableTaskWithContext *dispatchableTaskWithContext);
+	}
+	
+	[contract(InternalREApiContract, 1.0)]
+	[uuid(9ec5ff19-0e46-467e-a23c-68c2e6cfda10)]
+	interface IXAMLHostResourceMap
+	{
+		HRESULT GetString([in] HSTRING key, [out] [retval] HSTRING* value);
+		HRESULT GetImageStream([in] HSTRING imageName, [out] [retval] Windows.Storage.Streams.IRandomAccessStream** value);
+	}
+
+	[contract(InternalREApiContract, 1.0)]
+	[uuid(E635A44D-F52C-4BA8-BA7E-7E7CE10467C9)]
+	interface IXAMLHostWindow : IInspectable
+	{
+		HRESULT Start([in] Windows.Internal.UI.XAMLHost.IViewDefinition* viewDefinition);
+		[propget] HRESULT Dispatcher([out] [retval] Windows.Internal.UI.XAMLHost.IUIThreadDispatcher** value);
+		[propget] HRESULT Resources([out] [retval] Windows.Internal.UI.XAMLHost.IXAMLHostResourceMap** value);
+		[propget] HRESULT ScaleFactor([out] [retval] unsigned int* value);
+		[propget] HRESULT IsVisible([out] [retval] boolean* value);
+		[propput] HRESULT IsVisible([in] boolean value);
+		[propget] HRESULT IsCloaked([out] [retval] boolean* value);
+		[propput] HRESULT IsCloaked([in] boolean value);
+		[propget] HRESULT CurrentDisplayState([out] [retval] int* displayState); //ENUM
+		[eventadd] HRESULT DisplayStateChanged([in] Windows.Foundation.EventHandler<IInspectable*>* handler, [out] [retval] EventRegistrationToken* token);
+		[eventremove] HRESULT DisplayStateChanged([in] EventRegistrationToken token);
+		HRESULT SetCaretWidth([in] int value);
+		HRESULT SetTextScale([in] int value);
+		HRESULT Shutdown();
+	}
+	
+	[activatable(Windows.Foundation.UniversalApiContract, 2.0)]
+	[contract(Windows.Foundation.UniversalApiContract, 2.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass XAMLHostWindow
+	{
+		[default] interface Windows.Internal.UI.XAMLHost.IXAMLHostWindow;
+	}
+}

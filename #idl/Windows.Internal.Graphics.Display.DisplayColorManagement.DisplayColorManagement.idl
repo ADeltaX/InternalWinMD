@@ -1,0 +1,57 @@
+//import "inspectable.idl";
+//import "EventToken.idl";
+//import "AsyncInfo.idl";
+//import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+//import "Windows.UI.idl";
+
+/*namespace Windows.Internal.Graphics.Display.DisplayColorManagement
+{
+    interface __IDisplayColorManagementStatics;
+	
+	interface __IDisplayColorManagementPublicNonVirtuals;
+
+    runtimeclass DisplayColorManagement;
+}
+
+namespace Windows.Internal.Graphics.Display.DisplayColorManagement
+{
+    declare
+	{
+		interface Windows.Foundation.IAsyncOperation<Windows.Internal.Graphics.Display.DisplayColorManagement.DisplayColorManagement*>;
+	}
+}*/
+
+namespace Windows.Internal.Graphics.Display.DisplayColorManagement
+{
+	[version(0x00000001)]
+    [exclusiveto(Windows.Internal.Graphics.Display.DisplayColorManagement.DisplayColorManagement)]
+    [uuid(30b8b10b-a8f9-4247-ad28-29dc0c931d1e)]
+    interface IDisplayColorManagement
+    {
+		String GetDisplayActiveColorProfile();
+		void SetDisplayColorGdiLut(Int32 colorProfile);
+		UInt32 GetDisplayColorGdiLut(UInt32 something);
+		void SetDisplayColorLut(Int32 colorProfile);
+		UInt32 GetDisplayColorLut(UInt32 something);
+		void SetDisplayColorMatrix(Int32 colorProfile);
+		UInt32 GetDisplayColorMatrix();
+    }
+
+	[version(0x00000001)]
+    [exclusiveto(Windows.Internal.Graphics.Display.DisplayColorManagement.DisplayColorManagement)]
+    [uuid(62539684-40FC-4456-9A32-6AC61962EF46)]
+    interface IDisplayColorManagementStatics
+    {
+		Windows.Foundation.IAsyncOperation<Windows.Internal.Graphics.Display.DisplayColorManagement.DisplayColorManagement> GetColorManagerForDisplayAsync(String idDisplay);
+    }
+	
+    [marshaling_behavior(agile)]
+    [static(Windows.Internal.Graphics.Display.DisplayColorManagement.IDisplayColorManagementStatics, 0x00000001)]
+    [threading(both)]
+    [version(0x00000001)]
+    runtimeclass DisplayColorManagement
+    {
+		[default] interface Windows.Internal.Graphics.Display.DisplayColorManagement.IDisplayColorManagement;
+    }
+}

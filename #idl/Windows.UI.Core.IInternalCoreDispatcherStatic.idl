@@ -1,0 +1,18 @@
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.UI.Core.idl";
+
+namespace Windows.UI.Core
+{
+	[contractversion(1.0)]
+	apicontract InternalContract
+	{}
+
+	[contract(InternalContract, 1.0)]
+	[uuid(4B4D0861-D718-4F7C-BEC7-735C065F7C73)]
+	interface IInternalCoreDispatcherStatic
+	{
+		HRESULT GetForCurrentThread([out] [retval] Windows.UI.Core.CoreDispatcher **ppDispatcher);
+		HRESULT GetOrCreateForCurrentThread([out] [retval] Windows.UI.Core.CoreDispatcher **ppDispatcher);
+	}
+}

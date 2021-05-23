@@ -1,0 +1,90 @@
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+
+namespace Windows.Internal.ApplicationHosting
+{
+	enum ApplicationTerminationReason
+	{
+		None = 0x0,
+		Closed = 0x1,
+		Crashed = 0x2
+	};
+	
+	[contractversion(1.0)]
+	apicontract InternalContract
+	{
+	}
+		
+	[contract(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[uuid(64194914-d4ce-483b-8366-0391ed1c045b)]
+	interface IApplicationTerminatedEventArgs
+	{
+		[propget] HRESULT TerminationReason([out] [retval] ApplicationTerminationReason* reason);
+	}
+	
+	[contract(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[uuid(AEACD73F-184D-46BF-8641-8F825436E7AB)]
+	interface ICoreApplicationBridgeWindow
+	{
+		[propget] HRESULT IsClosed([out] [retval] boolean* value);
+		HRESULT Show();
+		HRESULT Hide();
+		HRESULT Shutdown();
+	}
+	
+	[contract(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[uuid(54d81703-c9f1-4afe-a2f3-4d6f9b7c828c)]
+	interface ICoreApplicationBridgePrivate
+	{
+		[propput] HRESULT BridgeWindow([in] Windows.Internal.ApplicationHosting.ICoreApplicationBridgeWindow* value);
+		[propget] HRESULT BridgeWindow([out] [retval] Windows.Internal.ApplicationHosting.ICoreApplicationBridgeWindow** value);
+	}
+	
+	[contract(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[uuid(730f230c-f245-4981-bb77-b5ab644d4c44)]
+	interface ICoreApplicationBridge
+	{
+		[propput] HRESULT Position([in] Windows.Foundation.Rect value);
+		[propget] HRESULT Position([out] [retval] Windows.Foundation.Rect* value);
+		[propput] HRESULT IsVisible([in] boolean value);
+		[propget] HRESULT IsVisible([out] [retval] boolean* value);
+		[propput] HRESULT HostWindow([in] unsigned int hwnd);
+		[propget] HRESULT HostWindow([out] [retval] unsigned int* hwnd);
+		[propget] HRESULT ProcessId([out] [retval] unsigned int* pid);
+		[propget] HRESULT Id([out] [retval] long* value);
+		[eventadd] HRESULT Terminated([in] Windows.Foundation.TypedEventHandler<IInspectable* , Windows.Internal.ApplicationHosting.IApplicationTerminatedEventArgs* >* handler, [out] [retval] EventRegistrationToken* token);
+		[eventremove] HRESULT Terminated([in] EventRegistrationToken token);
+		HRESULT Close();
+	}
+	
+	[contract(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass CoreApplicationBridgeWindow
+	{
+		[default] interface Windows.Internal.ApplicationHosting.ICoreApplicationBridge;
+		interface Windows.Internal.ApplicationHosting.ICoreApplicationBridgePrivate;
+		interface Windows.Internal.ApplicationHosting.ICoreApplicationBridgeWindow;
+	}
+	
+	[contract(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.ApplicationHosting.CoreApplicationBridgeFactory)]
+	[uuid(CE0D9BE7-3EB1-4714-9C0D-DE128B2E819E)]
+	interface ICoreApplicationBridgeFactory
+	{
+		[propput] HRESULT Id([in] long value);
+		[propget] HRESULT Id([out] [retval] long* value);
+		HRESULT ActivateApplication([in] Windows.Foundation.Rect rect, [in] HSTRING appId, [in] HSTRING param, [in] IInspectable* inspectable, [out] [retval] Windows.Foundation.IAsyncOperation<Windows.Internal.ApplicationHosting.ICoreApplicationBridge* >** p4);
+		HRESULT CreateLaunchActivationArgs([in] HSTRING p0, [in] HSTRING p1, [out] [retval] IInspectable** outVal);
+		HRESULT CreateOOPActivationArgs([in] HSTRING p0, [out] [retval] IInspectable** outVal);
+	}
+
+	[activatable(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[contract(Windows.Internal.ApplicationHosting.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass CoreApplicationBridgeFactory
+	{
+		[default] interface Windows.Internal.ApplicationHosting.ICoreApplicationBridgeFactory;
+	}
+}

@@ -1,0 +1,99 @@
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "windows.storage.streams.idl";
+import "windows.graphics.display.idl";
+
+namespace Windows.Internal
+{
+	[contractversion(1.0)]
+	apicontract InternalContract
+	{
+	}
+	
+	[exclusiveto(Windows.Internal.CoreDisplayManager)]
+	[uuid("3d497263-526e-4860-90ad-39e3ec1c90ac")]
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	interface ICoreDisplayManagerConfig
+	{
+		void OverrideDisplaySource(CoreDisplaySource a);
+		void EnableAutoUpdate(Boolean a);
+		void UpdateDisplays();
+	}
+	
+	[exclusiveto(Windows.Internal.CoreDisplayManager)]
+	[uuid("99b8b9a2-8296-49ff-ade4-96178d6e5516")]
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	interface ICoreDisplayManager
+	{
+		IVectorView<CoreDisplay> Displays { get; };
+		CoreDisplay TryGetFromPersistentId(String a);
+		CoreDisplay TryGetFromVolatileId(UInt32 a);
+		event Windows.Foundation.TypedEventHandler<CoreDisplayManager, CoreDisplayChangedEventArgs> DisplayChanged;
+	}
+	
+	[exclusiveto(Windows.Internal.CoreDisplay)]
+	[uuid("0945dbee-9e29-4b9c-8893-4ca2e299ec4c")]
+	interface ICoreDisplay
+	{
+		UInt32 VolatileId { get; };
+		Boolean IsPrimary { get; };
+		Boolean IsInternal { get; };
+		Boolean IsCloned { get; };
+		Boolean IsWireless { get; };
+		Boolean IsSimulated { get; };
+		Windows.Foundation.Rect Rect { get; };
+		Windows.Foundation.Rect WorkArea { get; };
+		Windows.Graphics.Display.DisplayOrientations OrientationPreferences { get; };
+		UInt32 HorizontalSizeInMm { get; };
+		UInt32 VerticalSizeInMm { get; };
+		UInt64 ViewDescription { get; };
+		Boolean IsDisplayDevicePresent(String a);
+		String TryGetPersistentId();
+		String TryGetFriendlyName();
+	}
+
+	[exclusiveto(Windows.Internal.CoreDisplaySource)]
+	[uuid("43874417-8fa7-4a03-8d19-cc8aefe3d0b7")]
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	interface ICoreDisplaySource
+	{
+		IVectorView<CoreDisplay> Displays { get; };
+	}
+
+	[exclusiveto(Windows.Internal.CoreDisplayChangedEventArgs)]
+	[uuid("6667c1a3-87c6-48c3-a73c-4a4bacc5ac7f")]
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	interface ICoreDisplayChangedEventArgs
+	{
+		CoreDisplay Display { get; };
+		UInt32 ChangeType { get; }; //enum Windows.Internal.DisplayChangeType
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	runtimeclass CoreDisplaySource
+	{
+		[default] interface Windows.Internal.ICoreDisplaySource;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	runtimeclass CoreDisplayChangedEventArgs
+	{
+		[default] interface Windows.Internal.ICoreDisplayChangedEventArgs;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	runtimeclass CoreDisplay
+	{
+		[default] interface Windows.Internal.ICoreDisplay;
+	}
+	
+	[activatable(Windows.Internal.InternalContract, 1.0)]
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass CoreDisplayManager
+	{
+		[default] interface Windows.Internal.ICoreDisplayManager;
+		interface Windows.Internal.ICoreDisplayManagerConfig;
+	}
+}

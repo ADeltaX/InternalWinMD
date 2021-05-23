@@ -1,0 +1,78 @@
+import "inspectable.idl";
+import "EventToken.idl";
+import "AsyncInfo.idl";
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+import "Windows.UI.idl";
+
+namespace Windows.Internal.Graphics.Display.DisplayEnhancementManagement
+{
+    [version(0x00000001)]
+    [exclusiveto(Windows.Internal.Graphics.Display.DisplayEnhancementManagement.DisplayEnhancementManagement)]
+    [uuid(cda29a3e-9e7e-4b86-8f5f-368aa0710008)]
+    interface IDisplayEnhancementManagement
+    {
+		Boolean IsNightLightCapable { get; };
+        Boolean IsNightLightOverridden { get; };
+        Int64 StartNightLightTransition(Single a, Double b);
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsNightLightCapableChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsNightLightOverriddenChanged;
+        Boolean IsAdaptiveColorCapable { get; };
+        UInt32 AdaptiveColorPolicy { get; }; //enum Windows.Internal.Graphics.Display.DisplayEnhancementManagement.AdaptiveColorPolicyType 
+        Boolean IsAdaptiveColorOverridden { get; };
+        Boolean IsAdaptiveColorOn { get; set; };
+        UInt64 AdaptiveColorAdaptationStrength { get; set; };
+        UInt64 CurrentWhitePoint { get; set; }; //Windows.Internal.Graphics.Display.DisplayEnhancementManagement.ChromaticityXYWinRT
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsAdaptiveColorCapableChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> AdaptiveColorPolicyChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsAdaptiveColorOnChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> AdaptiveColorAdaptationStrengthChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsAdaptiveColorOverriddenChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> CurrentWhitePointChanged;
+        Boolean IsBrightnessCapable { get; };
+        Boolean IsAutobrightnessOn { get; set; };
+        Boolean IsBoostModeOn { get; };
+        Single BatterySaverBrightnessMultiplier { get; set; };
+        Single DefaultBatterySaverBrightnessMultiplier { get; };
+        Single DimBrightnessMultiplier { get; set; };
+        Single KeyboardBrightnessMultiplier { get; set; };
+        UInt64 UserBrightnessSettingPercent { get; set; };
+        UInt64 ScreenBrightnessPercent { get; };
+        Boolean IsBrightnessOverridden { get; };
+        UInt64 ThermalThrottlingMaxMillinits { get; set; };
+        Boolean IsThermalThrottlingOn { get; set; };
+		void InternalGetTrustLevel0(); //How the hell should I make this 
+		void InternalGetTrustLevel1();	
+		void InternalGetTrustLevel2();
+		void InternalGetTrustLevel3();
+		String AmbientLightSensorDeviceId { get; set; };
+		String ColorLightSensorDeviceId { get; set; };
+		void InternalGetTrustLevel4();
+		event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsBrightnessCapableChanged;
+		event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsAutobrightnessOnChanged;
+		event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsBoostModeOnChanged;
+		event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> BatterySaverBrightnessMultiplierChanged;
+		event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> DimBrightnessMultiplierChanged;
+		event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> KeyboardBrightnessMultiplierChanged;
+		event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> UserBrightnessSettingPercentChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> ScreenBrightnessPercentChanged;
+        event Windows.Foundation.TypedEventHandler<DisplayEnhancementManagement, Object> IsBrightnessOverriddenChanged;
+    }
+	
+	[version(0x00000001)]
+    [exclusiveto(Windows.Internal.Graphics.Display.DisplayEnhancementManagement.DisplayEnhancementManagement)]
+    [uuid(22771028-1658-4E5E-AB77-303691A86FDA)]
+    interface IDisplayEnhancementManagementStatics
+    {
+		Windows.Foundation.IAsyncOperation<Windows.Internal.Graphics.Display.DisplayEnhancementManagement.DisplayEnhancementManagement> FromIdAsync(String idDisplay);
+    }
+	
+    [marshaling_behavior(agile)]
+    [static(Windows.Internal.Graphics.Display.DisplayEnhancementManagement.IDisplayEnhancementManagementStatics, 0x00000001)]
+    [threading(both)]
+    [version(0x00000001)]
+    runtimeclass DisplayEnhancementManagement
+    {
+		[default] interface Windows.Internal.Graphics.Display.DisplayEnhancementManagement.IDisplayEnhancementManagement;
+    }
+}
