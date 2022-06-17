@@ -1,0 +1,343 @@
+import "windowscontracts.idl";
+import "Windows.Foundation.idl";
+//import "Windows.Foundation.Collections.idl";
+import "Windows.UI.ViewManagement.idl";
+import "Windows.Devices.Sensors.idl";
+
+namespace Windows.Internal
+{
+	[contractversion(1.0)]
+	apicontract InternalContract
+	{
+	}
+}
+
+namespace Windows.Internal.Devices.Sensors
+{
+
+	// enum GestureState
+	// {
+		// Unknown = 0x0,
+		// Started = 0x1,
+		// Completed = 0x2,
+		// Cancelled = 0x3
+	// };
+	
+	enum GestureState
+	{
+		Completed = 0x0,
+		Started = 0x1,
+		Cancelled = 0x2,
+		Unknown = 0x3
+	};
+	
+	enum FoldType
+	{
+		NotDetected = 0x0,
+		Closing = 0x1,
+		Opening = 0x2
+	};
+	
+	
+	// ------------- FlipSensor
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FlipSensorReadingChangedEventArgs)]
+	[uuid(0a2219a8-b7d4-4493-b3d3-d272ae4874d6)]
+	interface IFlipSensorReadingChangedEventArgs
+	{
+		Windows.Internal.Devices.Sensors.FlipSensorReading Reading { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass FlipSensorReadingChangedEventArgs
+	{
+		[default] interface Windows.Internal.Devices.Sensors.IFlipSensorReadingChangedEventArgs;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FlipSensorReading)]
+	[uuid(9d83804b-efad-4dc1-942f-6a963659b223)]
+	interface IFlipSensorReading
+	{
+		Windows.Foundation.DateTime Timestamp { get; };
+		Windows.Internal.Devices.Sensors.GestureState GestureState { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass FlipSensorReading
+	{
+		[default] interface Windows.Internal.Devices.Sensors.IFlipSensorReading;
+		interface Windows.Internal.Devices.Sensors.IFlipSensorReading;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FlipSensor)]
+	[uuid(bb373eda-d150-42de-90a1-111b89003a75)]
+	interface IFlipSensor
+	{
+		String DeviceId { get; };
+		event Windows.Foundation.TypedEventHandler<Windows.Internal.Devices.Sensors.FlipSensor, Windows.Internal.Devices.Sensors.FlipSensorReadingChangedEventArgs> ReadingChanged;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FlipSensor)]
+	[uuid(935E473D-6926-4331-8F66-DF550DB5F161)]
+	interface IFlipSensorStatics
+	{
+		Windows.Foundation.IAsyncOperation<Windows.Internal.Devices.Sensors.FlipSensor> GetDefaultAsync();
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[static(Windows.Internal.Devices.Sensors.IFlipSensorStatics, Windows.Internal.InternalContract, 1.0)]
+	[threading(both)]
+	runtimeclass FlipSensor
+	{
+		[default] interface Windows.Internal.Devices.Sensors.IFlipSensor;
+		interface Windows.Internal.Devices.Sensors.IFlipSensor;
+	}
+	
+	
+	// ------------- FoldSensor
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FoldSensorReadingChangedEventArgs)]
+	[uuid(6d9dcd2e-1015-43ea-8627-4153e94d2c6f)]
+	interface IFoldSensorReadingChangedEventArgs
+	{
+		Windows.Internal.Devices.Sensors.FoldSensorReading Reading { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass FoldSensorReadingChangedEventArgs
+	{
+		[default] interface Windows.Internal.Devices.Sensors.IFoldSensorReadingChangedEventArgs;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FoldSensorReading)]
+	[uuid(413cec72-961e-4b3d-a8c0-6d78bd6362c6)]
+	interface IFoldSensorReading
+	{
+		Windows.Foundation.DateTime Timestamp { get; };
+		Windows.Internal.Devices.Sensors.GestureState GestureState { get; };
+		IVectorView<String> ContributingPanel { get; };
+		Single InitialAngle { get; };
+		Single FinalAngle { get; };
+		Windows.Internal.Devices.Sensors.FoldType FoldType { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass FoldSensorReading
+	{
+		[default] interface Windows.Internal.Devices.Sensors.IFoldSensorReading;
+		interface Windows.Internal.Devices.Sensors.IFoldSensorReading;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FoldSensor)]
+	[uuid(6c42e042-c32e-402a-80f1-649727a5479d)]
+	interface IFoldSensor
+	{
+		String DeviceId { get; };
+		event Windows.Foundation.TypedEventHandler<Windows.Internal.Devices.Sensors.FoldSensor, Windows.Internal.Devices.Sensors.FoldSensorReadingChangedEventArgs> ReadingChanged;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.Devices.Sensors.FoldSensor)]
+	[uuid(81693005-D366-4D78-8D53-69B0B2009846)]
+	interface IFoldSensorStatics
+	{
+		Windows.Foundation.IAsyncOperation<Windows.Internal.Devices.Sensors.FoldSensor> GetDefaultAsync();
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[static(Windows.Internal.Devices.Sensors.IFoldSensorStatics, Windows.Internal.InternalContract, 1.0)]
+	[threading(both)]
+	runtimeclass FoldSensor
+	{
+		[default] interface Windows.Internal.Devices.Sensors.IFoldSensor;
+		interface Windows.Internal.Devices.Sensors.IFoldSensor;
+	}
+}
+
+namespace Windows.Internal.System
+{
+	enum HingeState
+	{
+		Unknown = 0x0,
+		Closed = 0x1,
+		Concave = 0x2,
+		Flat = 0x3,
+		Convex = 0x4,
+		Full = 0x5
+	};
+	
+	// ---------------- TwoPanelFolioHingeDevicePosture
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelFolioHingeDevicePostureReadingChangedEventArgs)]
+	[uuid(e264960a-3c70-4097-9b5d-bc928f7b9ceb)]
+	interface ITwoPanelFolioHingeDevicePostureReadingChangedEventArgs
+	{
+		Windows.Internal.System.TwoPanelFolioHingeDevicePostureReading Reading { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass TwoPanelFolioHingeDevicePostureReadingChangedEventArgs
+	{
+		[default] interface Windows.Internal.System.ITwoPanelFolioHingeDevicePostureReadingChangedEventArgs;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelFolioHingeDevicePostureReading)]
+	[uuid(9a1efdcb-66f7-49a3-851b-b313044bff8f)]
+	interface ITwoPanelFolioHingeDevicePostureReading
+	{
+		Windows.Foundation.DateTime Timestamp { get; };
+		Windows.Internal.System.HingeState Hinge1State { get; };
+		Windows.Internal.System.HingeState Hinge2State { get; };
+		Windows.Devices.Sensors.SimpleOrientation Panel1Orientation { get; };
+		String Panel1Id { get; };
+		Windows.Devices.Sensors.SimpleOrientation Panel2Orientation { get; };
+		String Panel2Id { get; };
+		Guid ActivityId { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass TwoPanelFolioHingeDevicePostureReading
+	{
+		[default] interface Windows.Internal.System.ITwoPanelFolioHingeDevicePostureReading;
+		interface Windows.Internal.System.ITwoPanelFolioHingeDevicePostureReading;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelFolioHingeDevicePosture)]
+	[uuid(d5ba4813-ff33-44a6-b3d2-99b7d0d49f46)]
+	interface ITwoPanelFolioHingeDevicePosture
+	{
+		Windows.Foundation.IAsyncOperation<Windows.Internal.System.TwoPanelFolioHingeDevicePostureReading> GetCurrentPostureAsync();
+		event Windows.Foundation.TypedEventHandler<Windows.Internal.System.TwoPanelFolioHingeDevicePosture, Windows.Internal.System.TwoPanelFolioHingeDevicePostureReadingChangedEventArgs> PostureChanged;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelFolioHingeDevicePosture)]
+	[uuid(32321869-65ea-5de9-90f7-7c943b106fa8)]
+	interface ITwoPanelFolioHingeDevicePosture2
+	{
+		void GetSupportedPostures(out Boolean unk1, out UInt32 unk2);
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelFolioHingeDevicePosture)]
+	[uuid(6124d63b-adab-478e-b1cd-0a93b063d993)]
+	interface ITwoPanelFolioHingeDevicePostureStatics
+	{
+		Windows.Foundation.IAsyncOperation<Windows.Internal.System.TwoPanelFolioHingeDevicePosture> GetDefaultAsync();
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[static(Windows.Internal.System.ITwoPanelFolioHingeDevicePostureStatics, Windows.Internal.InternalContract, 1.0)]
+	[threading(both)]
+	runtimeclass TwoPanelFolioHingeDevicePosture
+	{
+		[default] interface Windows.Internal.System.ITwoPanelFolioHingeDevicePosture;
+		interface Windows.Internal.System.ITwoPanelFolioHingeDevicePosture;
+		interface Windows.Internal.System.ITwoPanelFolioHingeDevicePosture2;
+	}
+	
+	// -------------------- TwoPanelHingedDevicePosture
+	
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelHingedDevicePostureReadingChangedEventArgs)]
+	[uuid(c2d190d5-9fdd-46ed-babe-af86d3cc01dc)]
+	interface ITwoPanelHingedDevicePostureReadingChangedEventArgs
+	{
+		Windows.Internal.System.TwoPanelHingedDevicePostureReading Reading { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass TwoPanelHingedDevicePostureReadingChangedEventArgs
+	{
+		[default] interface Windows.Internal.System.ITwoPanelHingedDevicePostureReadingChangedEventArgs;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelHingedDevicePostureReading)]
+	[uuid(8ea121fe-8e3d-4293-bfc8-0f0b8542fee3)]
+	interface ITwoPanelHingedDevicePostureReading
+	{
+		Windows.Foundation.DateTime Timestamp { get; };
+		Windows.Internal.System.HingeState HingeState { get; };
+		Windows.Devices.Sensors.SimpleOrientation Panel1Orientation { get; };
+		String Panel1Id { get; };
+		Windows.Devices.Sensors.SimpleOrientation Panel2Orientation { get; };
+		String Panel2Id { get; };
+		Guid ActivityId { get; };
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[threading(both)]
+	runtimeclass TwoPanelHingedDevicePostureReading
+	{
+		[default] interface Windows.Internal.System.ITwoPanelHingedDevicePostureReading;
+		interface Windows.Internal.System.ITwoPanelHingedDevicePostureReading;
+	}
+	
+	
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelHingedDevicePosture)]
+	[uuid(36a0b2f9-a502-43ac-9f8b-9036e7bc60d8)]
+	interface ITwoPanelHingedDevicePosture
+	{
+		Windows.Foundation.IAsyncOperation<Windows.Internal.System.TwoPanelHingedDevicePostureReading> GetCurrentPostureAsync();
+		event Windows.Foundation.TypedEventHandler<Windows.Internal.System.TwoPanelHingedDevicePosture, Windows.Internal.System.TwoPanelHingedDevicePostureReadingChangedEventArgs> PostureChanged;
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelHingedDevicePosture)]
+	[uuid(4ac3e265-90f9-5d51-9685-ecaff3f7f7e5)]
+	interface ITwoPanelHingedDevicePosture2
+	{
+		void GetSupportedPostures(out Boolean unk1, out UInt32 unk2);
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[exclusiveto(Windows.Internal.System.TwoPanelHingedDevicePosture)]
+	[uuid(C973B03E-D13B-44BF-8999-88BC342D3593)]
+	interface ITwoPanelHingedDevicePostureStatics
+	{
+		Windows.Foundation.IAsyncOperation<Windows.Internal.System.TwoPanelHingedDevicePosture> GetDefaultAsync();
+	}
+	
+	[contract(Windows.Internal.InternalContract, 1.0)]
+	[marshaling_behavior(agile)]
+	[static(Windows.Internal.System.ITwoPanelHingedDevicePostureStatics, Windows.Internal.InternalContract, 1.0)]
+	[threading(both)]
+	runtimeclass TwoPanelHingedDevicePosture
+	{
+		[default] interface Windows.Internal.System.ITwoPanelHingedDevicePosture;
+		interface Windows.Internal.System.ITwoPanelHingedDevicePosture;
+		interface Windows.Internal.System.ITwoPanelHingedDevicePosture2;
+	}
+}
